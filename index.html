@@ -22,6 +22,8 @@
             animation: gradientShift 10s ease infinite;
             color: #fff;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes gradientShift {
@@ -181,6 +183,7 @@
             padding: 100px 40px 40px;
             position: relative;
             z-index: 10;
+            flex: 1;
         }
 
         /* 主页样式 */
@@ -501,6 +504,24 @@
             box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
         }
 
+        /* 页脚样式 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(15, 27, 58, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+            margin-top: auto;
+        }
+
+        .footer-text {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.4;
+        }
+
         /* 全局点击水波纹效果 */
         .global-water-ripple {
             position: fixed;
@@ -597,6 +618,10 @@
             
             .download-card {
                 padding: 35px 25px;
+            }
+            
+            .footer {
+                padding: 15px;
             }
         }
     </style>
@@ -822,6 +847,13 @@
             </div>
         </div>
     </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-text">
+            <p>一切后果请寻找代码编写人，网站管理人拥有最终解释权</p>
+        </div>
+    </footer>
 
     <script>
         // 创建自动水波纹
