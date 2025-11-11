@@ -477,6 +477,30 @@
             box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4);
         }
 
+        /* 直接下载链接样式 */
+        .direct-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 100%;
+            text-align: center;
+        }
+
+        .direct-download:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #66BB6A, #4CAF50);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+
         /* 全局点击水波纹效果 */
         .global-water-ripple {
             position: fixed;
@@ -630,7 +654,7 @@
             </div>
 
             <div class="items-grid">
-                <!-- WINRAR -->
+                <!-- WINRAR - 直接下载 -->
                 <div class="item-card">
                     <span class="item-icon">📦</span>
                     <h3>WinRAR</h3>
@@ -639,22 +663,46 @@
                         <span>版本: 6.24</span>
                         <span>大小: 3.5 MB</span>
                     </div>
-                    <a href="https://www.rarlab.com/download.htm" class="official-link" target="_blank">官方下载</a>
+                    <a href="winrar-x64.exe" class="direct-download" download>直接下载</a>
                 </div>
 
-                <!-- Windows激活工具 -->
+                <!-- Windows激活工具 - 直接下载 -->
                 <div class="item-card">
                     <span class="item-icon">🔑</span>
                     <h3>Windows激活工具</h3>
                     <p class="item-info">安全可靠的Windows系统激活工具，一键激活Windows系统，支持多种版本。</p>
                     <div class="item-meta">
-                        <span>版本: KMS 1.0</span>
+                        <span>版本: 2024</span>
                         <span>大小: 8.2 MB</span>
                     </div>
-                    <a href="https://github.com/massgravel/Microsoft-Activation-Scripts" class="official-link" target="_blank">GitHub下载</a>
+                    <a href="2024最新激活工具.rar" class="direct-download" download>直接下载</a>
                 </div>
 
-                <!-- Marktext -->
+                <!-- Steam - 直接下载 -->
+                <div class="item-card">
+                    <span class="item-icon">🎮</span>
+                    <h3>Steam</h3>
+                    <p class="item-info">全球最大的数字游戏平台，拥有数千款游戏，提供社交、商店和社区功能。</p>
+                    <div class="item-meta">
+                        <span>版本: 2023.10</span>
+                        <span>大小: 2.1 MB</span>
+                    </div>
+                    <a href="SteamSetup.exe" class="direct-download" download>直接下载</a>
+                </div>
+
+                <!-- 奇游安装器 - 直接下载 -->
+                <div class="item-card">
+                    <span class="item-icon">🚀</span>
+                    <h3>奇游安装器</h3>
+                    <p class="item-info">专业的网络加速工具安装器，优化游戏连接，降低延迟，提供稳定的网络环境。</p>
+                    <div class="item-meta">
+                        <span>版本: 2023.12</span>
+                        <span>大小: 45.6 MB</span>
+                    </div>
+                    <a href="QiYouInstaller_20231206_10.exe" class="direct-download" download>直接下载</a>
+                </div>
+
+                <!-- Marktext - 官方链接 -->
                 <div class="item-card">
                     <span class="item-icon">📝</span>
                     <h3>Marktext</h3>
@@ -666,7 +714,7 @@
                     <a href="https://github.com/marktext/marktext" class="official-link" target="_blank">GitHub下载</a>
                 </div>
 
-                <!-- ToDesk -->
+                <!-- ToDesk - 官方链接 -->
                 <div class="item-card">
                     <span class="item-icon">🖥️</span>
                     <h3>ToDesk</h3>
@@ -678,19 +726,7 @@
                     <a href="https://www.todesk.com/download.html" class="official-link" target="_blank">官方下载</a>
                 </div>
 
-                <!-- Steam -->
-                <div class="item-card">
-                    <span class="item-icon">🎮</span>
-                    <h3>Steam</h3>
-                    <p class="item-info">全球最大的数字游戏平台，拥有数千款游戏，提供社交、商店和社区功能。</p>
-                    <div class="item-meta">
-                        <span>版本: 2023.10</span>
-                        <span>大小: 2.1 MB</span>
-                    </div>
-                    <a href="https://store.steampowered.com/about/" class="official-link" target="_blank">官方下载</a>
-                </div>
-
-                <!-- Epic Games -->
+                <!-- Epic Games - 官方链接 -->
                 <div class="item-card">
                     <span class="item-icon">🎯</span>
                     <h3>Epic Games</h3>
@@ -700,18 +736,6 @@
                         <span>大小: 1.8 MB</span>
                     </div>
                     <a href="https://www.epicgames.com/store/zh-CN/download" class="official-link" target="_blank">官方下载</a>
-                </div>
-
-                <!-- 加速器 -->
-                <div class="item-card">
-                    <span class="item-icon">🚀</span>
-                    <h3>网络加速器</h3>
-                    <p class="item-info">专业的网络加速工具，优化游戏连接，降低延迟，提供稳定的网络环境。</p>
-                    <div class="item-meta">
-                        <span>版本: 3.5.7</span>
-                        <span>大小: 45.6 MB</span>
-                    </div>
-                    <a href="https://www.leigod.com/" class="official-link" target="_blank">官方下载</a>
                 </div>
             </div>
         </div>
@@ -925,6 +949,20 @@
             // 官方链接点击效果
             const officialLinks = document.querySelectorAll('.official-link');
             officialLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    createGlobalWaterRipple(e.clientX, e.clientY);
+                    
+                    // 按钮按压效果
+                    link.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        link.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // 直接下载链接点击效果
+            const directDownloads = document.querySelectorAll('.direct-download');
+            directDownloads.forEach(link => {
                 link.addEventListener('click', (e) => {
                     createGlobalWaterRipple(e.clientX, e.clientY);
                     
