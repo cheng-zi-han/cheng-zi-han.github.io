@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载中心 - 如水般流畅的体验</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background: linear-gradient(-45deg, #0f1b3a, #1a2a6c, #2c3e50, #4a6572);
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 水波纹效果 */
+        .water-ripples {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .ripple {
+            position: absolute;
+            border: 2px solid rgba(74, 144, 226, 0.4);
+            border-radius: 50%;
+            animation: rippleExpand 3s ease-out infinite;
+            pointer-events: none;
+        }
+
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            border-radius: 50%;
+            animation: rippleInner 3s ease-out infinite;
+        }
+
+        @keyframes rippleExpand {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: scale(8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes rippleInner {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* 水光效果 */
+        .water-shine {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(255,255,255,0.08) 50%, 
+                transparent 100%);
+            animation: waterShine 12s ease-in-out infinite;
+            transform: rotate(45deg);
+            z-index: 1;
+        }
+
+        @keyframes waterShine {
+            0%, 100% { transform: rotate(45deg) translateX(-100%); }
+            50% { transform: rotate(45deg) translateX(100%); }
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: rgba(15, 27, 58, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(15, 27, 58, 0.95);
+            padding: 15px 40px;
+        }
+
+        .nav-brand {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-brand i {
+            color: #4fc3f7;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+            background: rgba(79, 195, 247, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 40px 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 主页样式 */
+        .home-page {
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .header {
+            margin-bottom: 80px;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin: 0 auto;
+            max-width: 900px;
+        }
+
+        .download-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 50px 35px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            animation: cardSlideIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(40px);
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.2),
+                0 0 0 1px rgba(255,255,255,0.1) inset;
+        }
+
+        .download-card:nth-child(1) { animation-delay: 0.2s; }
+        .download-card:nth-child(2) { animation-delay: 0.4s; }
+
+        @keyframes cardSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,255,255,0.1), 
+                transparent);
+            transition: left 0.8s ease;
+        }
+
+        .download-card:hover::before {
+            left: 100%;
+        }
+
+        .download-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(255,255,255,0.2) inset,
+                0 0 30px rgba(79, 195, 247, 0.2);
+        }
+
+        .card-icon {
+            font-size: 4.5em;
+            margin-bottom: 25px;
+            display: block;
+            transition: all 0.5s ease;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+
+        .download-card:hover .card-icon {
+            transform: scale(1.2) translateY(-5px);
+            filter: drop-shadow(0 8px 25px rgba(0,0,0,0.4));
+        }
+
+        .download-card h3 {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .download-card p {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            color: white;
+            padding: 16px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 8px 25px rgba(41, 182, 246, 0.3),
+                0 0 0 1px rgba(255,255,255,0.2) inset;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,255,255,0.3), 
+                transparent);
+            transition: left 0.6s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: linear-gradient(135deg, #81d4fa, #4fc3f7);
+            box-shadow: 
+                0 15px 35px rgba(41, 182, 246, 0.4),
+                0 0 0 1px rgba(255,255,255,0.3) inset,
+                0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .action-btn:active {
+            transform: translateY(-2px) scale(1.02);
+            transition: all 0.1s ease;
+        }
+
+        /* 内容页面样式 */
+        .content-page {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .content-page.active {
+            display: block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .page-header h1 {
+            font-size: 2.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: cardSlideIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(30px);
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.2),
+                0 0 0 1px rgba(255,255,255,0.1) inset;
+        }
+
+        .item-card:nth-child(1) { animation-delay: 0.1s; }
+        .item-card:nth-child(2) { animation-delay: 0.2s; }
+        .item-card:nth-child(3) { animation-delay: 0.3s; }
+        .item-card:nth-child(4) { animation-delay: 0.4s; }
+        .item-card:nth-child(5) { animation-delay: 0.5s; }
+        .item-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .item-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(255,255,255,0.2) inset;
+        }
+
+        .item-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+
+        .item-card h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .item-info {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 官方链接样式 */
+        .official-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 100%;
+            text-align: center;
+        }
+
+        .official-link:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #81d4fa, #4fc3f7);
+            box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4);
+        }
+
+        /* 全局点击水波纹效果 */
+        .global-water-ripple {
+            position: fixed;
+            border: 2px solid rgba(79, 195, 247, 0.5);
+            border-radius: 50%;
+            animation: globalRipple 1s ease-out;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .global-water-ripple::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+            border-radius: 50%;
+            animation: globalRippleInner 1s ease-out;
+        }
+
+        @keyframes globalRipple {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(12);
+                opacity: 0;
+            }
+        }
+
+        @keyframes globalRippleInner {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .download-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 10px;
+            }
+            
+            .container {
+                padding: 120px 20px 30px;
+            }
+            
+            .header h1 {
+                font-size: 2.6em;
+            }
+            
+            .page-header h1 {
+                font-size: 2.2em;
+            }
+            
+            .download-card {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="water-ripples" id="waterRipples"></div>
+    <div class="water-shine"></div>
+    
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-brand">
+            <i class="fas fa-download"></i>
+            下载中心
+        </a>
+        <div class="nav-links">
+            <a href="#" class="nav-link active" data-page="home">首页</a>
+            <a href="#" class="nav-link" data-page="software">软件下载</a>
+            <a href="#" class="nav-link" data-page="mirror">镜像下载</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 主页内容 -->
+        <div class="content-page active" id="home-page">
+            <div class="home-page">
+                <div class="header">
+                    <h1>下载中心</h1>
+                    <p>如水般流畅的交互体验，精选软件与系统镜像一站式获取</p>
+                </div>
+
+                <div class="download-grid">
+                    <!-- 软件下载 -->
+                    <div class="download-card" id="software-card">
+                        <span class="card-icon">💻</span>
+                        <h3>软件下载</h3>
+                        <p>精选实用软件工具<br>系统优化与办公应用</p>
+                        <a href="#" class="action-btn" data-page="software">开始下载</a>
+                    </div>
+
+                    <!-- 镜像下载 -->
+                    <div class="download-card" id="mirror-card">
+                        <span class="card-icon">📀</span>
+                        <h3>镜像下载</h3>
+                        <p>系统镜像文件<br>快速部署与恢复</p>
+                        <a href="#" class="action-btn" data-page="mirror">获取镜像</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 软件下载页面内容 -->
+        <div class="content-page" id="software-page">
+            <div class="page-header">
+                <h1>💻 软件下载</h1>
+                <p>精选实用软件，满足您的各种需求</p>
+            </div>
+
+            <div class="items-grid">
+                <!-- WINRAR -->
+                <div class="item-card">
+                    <span class="item-icon">📦</span>
+                    <h3>WinRAR</h3>
+                    <p class="item-info">强大的压缩文件管理器，支持RAR、ZIP等多种格式，提供高效的文件压缩和解压功能。</p>
+                    <div class="item-meta">
+                        <span>版本: 6.24</span>
+                        <span>大小: 3.5 MB</span>
+                    </div>
+                    <a href="https://www.rarlab.com/download.htm" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- Windows激活工具 -->
+                <div class="item-card">
+                    <span class="item-icon">🔑</span>
+                    <h3>Windows激活工具</h3>
+                    <p class="item-info">安全可靠的Windows系统激活工具，一键激活Windows系统，支持多种版本。</p>
+                    <div class="item-meta">
+                        <span>版本: KMS 1.0</span>
+                        <span>大小: 8.2 MB</span>
+                    </div>
+                    <a href="https://github.com/massgravel/Microsoft-Activation-Scripts" class="official-link" target="_blank">GitHub下载</a>
+                </div>
+
+                <!-- Marktext -->
+                <div class="item-card">
+                    <span class="item-icon">📝</span>
+                    <h3>Marktext</h3>
+                    <p class="item-info">简洁优雅的Markdown编辑器，实时预览，支持多种主题，是程序员的理想写作工具。</p>
+                    <div class="item-meta">
+                        <span>版本: 0.17.1</span>
+                        <span>大小: 85.3 MB</span>
+                    </div>
+                    <a href="https://github.com/marktext/marktext" class="official-link" target="_blank">GitHub下载</a>
+                </div>
+
+                <!-- ToDesk -->
+                <div class="item-card">
+                    <span class="item-icon">🖥️</span>
+                    <h3>ToDesk</h3>
+                    <p class="item-info">流畅的远程桌面控制软件，支持跨平台远程连接，提供高清画质和低延迟体验。</p>
+                    <div class="item-meta">
+                        <span>版本: 4.6.2</span>
+                        <span>大小: 25.8 MB</span>
+                    </div>
+                    <a href="https://www.todesk.com/download.html" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- Steam -->
+                <div class="item-card">
+                    <span class="item-icon">🎮</span>
+                    <h3>Steam</h3>
+                    <p class="item-info">全球最大的数字游戏平台，拥有数千款游戏，提供社交、商店和社区功能。</p>
+                    <div class="item-meta">
+                        <span>版本: 2023.10</span>
+                        <span>大小: 2.1 MB</span>
+                    </div>
+                    <a href="https://store.steampowered.com/about/" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- Epic Games -->
+                <div class="item-card">
+                    <span class="item-icon">🎯</span>
+                    <h3>Epic Games</h3>
+                    <p class="item-info">Epic游戏平台，每周提供免费游戏，拥有独占大作和优质独立游戏。</p>
+                    <div class="item-meta">
+                        <span>版本: 15.20</span>
+                        <span>大小: 1.8 MB</span>
+                    </div>
+                    <a href="https://www.epicgames.com/store/zh-CN/download" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- 加速器 -->
+                <div class="item-card">
+                    <span class="item-icon">🚀</span>
+                    <h3>网络加速器</h3>
+                    <p class="item-info">专业的网络加速工具，优化游戏连接，降低延迟，提供稳定的网络环境。</p>
+                    <div class="item-meta">
+                        <span>版本: 3.5.7</span>
+                        <span>大小: 45.6 MB</span>
+                    </div>
+                    <a href="https://www.leigod.com/" class="official-link" target="_blank">官方下载</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 镜像下载页面内容 -->
+        <div class="content-page" id="mirror-page">
+            <div class="page-header">
+                <h1>📀 镜像下载</h1>
+                <p>系统镜像与恢复文件，快速部署您的环境</p>
+            </div>
+
+            <div class="items-grid">
+                <!-- Windows 11 -->
+                <div class="item-card">
+                    <span class="item-icon">🖥️</span>
+                    <h3>Windows 11</h3>
+                    <p class="item-info">最新 Windows 11 系统镜像，包含所有更新和安全补丁，提供现代化的用户界面。</p>
+                    <div class="item-meta">
+                        <span>版本: 23H2</span>
+                        <span>大小: 5.2 GB</span>
+                    </div>
+                    <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- Ubuntu 22.04 -->
+                <div class="item-card">
+                    <span class="item-icon">🐧</span>
+                    <h3>Ubuntu 22.04</h3>
+                    <p class="item-info">Ubuntu LTS 版本，稳定的Linux发行版，适合服务器和开发环境。</p>
+                    <div class="item-meta">
+                        <span>版本: 22.04.3</span>
+                        <span>大小: 4.7 GB</span>
+                    </div>
+                    <a href="https://ubuntu.com/download/desktop" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- Windows 7 -->
+                <div class="item-card">
+                    <span class="item-icon">🔄</span>
+                    <h3>Windows 7</h3>
+                    <p class="item-info">经典的Windows 7操作系统，虽然已停止支持，但仍被广泛使用于特定环境。</p>
+                    <div class="item-meta">
+                        <span>版本: SP1</span>
+                        <span>大小: 3.2 GB</span>
+                    </div>
+                    <a href="https://www.microsoft.com/zh-cn/software-download/windows7" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- 微PE工具箱 -->
+                <div class="item-card">
+                    <span class="item-icon">🔧</span>
+                    <h3>微PE工具箱</h3>
+                    <p class="item-info">轻量级Windows PE工具，系统维护和故障排除必备工具，无广告纯净版。</p>
+                    <div class="item-meta">
+                        <span>版本: 2.3</span>
+                        <span>大小: 220 MB</span>
+                    </div>
+                    <a href="http://www.wepe.com.cn/download.html" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- Android x86 -->
+                <div class="item-card">
+                    <span class="item-icon">📱</span>
+                    <h3>Android x86</h3>
+                    <p class="item-info">在PC上运行Android系统，支持触摸屏和游戏控制器，适用于x86架构设备。</p>
+                    <div class="item-meta">
+                        <span>版本: 9.0-r2</span>
+                        <span>大小: 1.2 GB</span>
+                    </div>
+                    <a href="https://www.android-x86.org/download" class="official-link" target="_blank">官方下载</a>
+                </div>
+
+                <!-- Windows 10 -->
+                <div class="item-card">
+                    <span class="item-icon">⭐</span>
+                    <h3>Windows 10</h3>
+                    <p class="item-info">Windows 10 系统镜像，广泛使用的操作系统，稳定可靠，兼容性强。</p>
+                    <div class="item-meta">
+                        <span>版本: 22H2</span>
+                        <span>大小: 5.4 GB</span>
+                    </div>
+                    <a href="https://www.microsoft.com/zh-cn/software-download/windows10" class="official-link" target="_blank">官方下载</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 创建自动水波纹
+        function createAutoRipples() {
+            const container = document.getElementById('waterRipples');
+            
+            function createRipple(x, y) {
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                
+                const size = Math.random() * 50 + 30;
+                const delay = Math.random() * 2;
+                
+                ripple.style.width = `${size}px`;
+                ripple.style.height = `${size}px`;
+                ripple.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 3000);
+            }
+            
+            // 自动生成波纹
+            setInterval(() => {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                createRipple(x, y);
+            }, 1500);
+            
+            // 初始创建一些波纹
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    createRipple(x, y);
+                }, i * 300);
+            }
+        }
+
+        // 全局点击水波纹效果
+        function createGlobalWaterRipple(x, y) {
+            const ripple = document.createElement('div');
+            ripple.className = 'global-water-ripple';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        }
+
+        // 页面导航功能
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const actionBtns = document.querySelectorAll('.action-btn[data-page]');
+            const pages = document.querySelectorAll('.content-page');
+            
+            // 切换页面函数
+            function switchPage(pageId) {
+                // 隐藏所有页面
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // 显示目标页面
+                document.getElementById(pageId + '-page').classList.add('active');
+                
+                // 更新导航链接状态
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-page') === pageId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // 为导航链接添加事件
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.getAttribute('data-page');
+                    switchPage(pageId);
+                });
+            });
+            
+            // 为操作按钮添加事件
+            actionBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = btn.getAttribute('data-page');
+                    switchPage(pageId);
+                });
+            });
+        }
+
+        // 导航栏滚动效果
+        function setupNavbarScroll() {
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // 设置交互效果
+        function setupInteractions() {
+            // 整个页面点击产生波纹
+            document.addEventListener('click', (e) => {
+                createGlobalWaterRipple(e.clientX, e.clientY);
+            });
+            
+            // 官方链接点击效果
+            const officialLinks = document.querySelectorAll('.official-link');
+            officialLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    createGlobalWaterRipple(e.clientX, e.clientY);
+                    
+                    // 按钮按压效果
+                    link.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        link.style.transform = '';
+                    }, 150);
+                });
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            createAutoRipples();
+            setupNavigation();
+            setupNavbarScroll();
+            setupInteractions();
+        });
+    </script>
+</body>
+</html>
