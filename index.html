@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>下载中心 - 如水般流畅的体验</title>
+    <title>程子函下载中心 - 如水般流畅的体验</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -29,6 +29,82 @@
         @keyframes gradientShift {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
+        }
+
+        /* 无障碍访问优化样式 */
+        /* 高对比度模式支持 */
+        @media (prefers-contrast: high) {
+            .download-card, .item-card {
+                background: rgba(255, 255, 255, 0.2);
+                border: 2px solid #fff;
+            }
+            
+            .nav-link {
+                border: 1px solid rgba(255, 255, 255, 0.5);
+            }
+        }
+        
+        /* 减少动画偏好 */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .water-ripples, .water-shine {
+                display: none;
+            }
+        }
+        
+        /* 焦点指示器增强 */
+        .nav-link:focus, 
+        .action-btn:focus, 
+        .official-link:focus, 
+        .direct-download:focus {
+            outline: 3px solid #4fc3f7;
+            outline-offset: 2px;
+            background: rgba(79, 195, 247, 0.3);
+        }
+        
+        /* 跳过导航链接 - 为键盘用户提供 */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #4fc3f7;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 6px;
+        }
+        
+        /* 屏幕阅读器专用文本 */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* 增加链接和按钮的最小触摸目标尺寸 */
+        .nav-link, .action-btn, .official-link, .direct-download {
+            min-height: 44px;
+            min-width: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* 水波纹效果 */
@@ -217,10 +293,10 @@
 
         .download-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 40px;
             margin: 0 auto;
-            max-width: 900px;
+            max-width: 1200px;
         }
 
         .download-card {
@@ -244,6 +320,7 @@
 
         .download-card:nth-child(1) { animation-delay: 0.2s; }
         .download-card:nth-child(2) { animation-delay: 0.4s; }
+        .download-card:nth-child(3) { animation-delay: 0.6s; }
 
         @keyframes cardSlideIn {
             to {
@@ -627,225 +704,306 @@
     </style>
 </head>
 <body>
-    <div class="water-ripples" id="waterRipples"></div>
-    <div class="water-shine"></div>
+    <!-- 跳过导航链接 - 帮助键盘用户快速跳转到主要内容 -->
+    <a href="#main-content" class="skip-link">跳转到主要内容</a>
     
-    <nav class="navbar" id="navbar">
+    <div class="water-ripples" id="waterRipples" aria-hidden="true"></div>
+    <div class="water-shine" aria-hidden="true"></div>
+    
+    <nav class="navbar" id="navbar" aria-label="主导航">
         <a href="#" class="nav-brand">
-            <i class="fas fa-download"></i>
+            <i class="fas fa-download" aria-hidden="true"></i>
             下载中心
         </a>
         <div class="nav-links">
-            <a href="#" class="nav-link active" data-page="home">首页</a>
-            <a href="#" class="nav-link" data-page="software">软件下载</a>
-            <a href="#" class="nav-link" data-page="mirror">镜像下载</a>
+            <a href="#" class="nav-link active" data-page="home" aria-current="page">
+                <span class="fas fa-home" aria-hidden="true"></span>
+                <span>首页</span>
+            </a>
+            <a href="#" class="nav-link" data-page="software">
+                <span class="fas fa-download" aria-hidden="true"></span>
+                <span>软件下载</span>
+            </a>
+            <a href="#" class="nav-link" data-page="mirror">
+                <span class="fas fa-compact-disc" aria-hidden="true"></span>
+                <span>镜像下载</span>
+            </a>
+            <a href="#" class="nav-link" data-page="programming">
+                <span class="fas fa-code" aria-hidden="true"></span>
+                <span>编程刷题</span>
+            </a>
         </div>
     </nav>
 
     <div class="container">
         <!-- 主页内容 -->
-        <div class="content-page active" id="home-page">
-            <div class="home-page">
-                <div class="header">
-                    <h1>下载中心</h1>
-                    <p>如水般流畅的交互体验，精选软件与系统镜像一站式获取</p>
-                </div>
-
-                <div class="download-grid">
-                    <!-- 软件下载 -->
-                    <div class="download-card" id="software-card">
-                        <span class="card-icon">💻</span>
-                        <h3>软件下载</h3>
-                        <p>精选实用软件工具<br>系统优化与办公应用</p>
-                        <a href="#" class="action-btn" data-page="software">开始下载</a>
+        <main id="main-content" tabindex="-1">
+            <div class="content-page active" id="home-page">
+                <div class="home-page">
+                    <div class="header">
+                        <h1>下载中心</h1>
+                        <p>如水般流畅的交互体验，精选软件与系统镜像一站式获取</p>
                     </div>
 
-                    <!-- 镜像下载 -->
-                    <div class="download-card" id="mirror-card">
-                        <span class="card-icon">📀</span>
-                        <h3>镜像下载</h3>
-                        <p>系统镜像文件<br>快速部署与恢复</p>
-                        <a href="#" class="action-btn" data-page="mirror">获取镜像</a>
+                    <div class="download-grid">
+                        <!-- 软件下载 -->
+                        <div class="download-card" id="software-card" role="button" tabindex="0">
+                            <span class="card-icon" aria-hidden="true">💻</span>
+                            <h3>软件下载</h3>
+                            <p>精选实用软件工具<br>系统优化与办公应用</p>
+                            <a href="#" class="action-btn" data-page="software">
+                                <span class="sr-only">访问</span>
+                                开始下载
+                            </a>
+                        </div>
+
+                        <!-- 镜像下载 -->
+                        <div class="download-card" id="mirror-card" role="button" tabindex="0">
+                            <span class="card-icon" aria-hidden="true">📀</span>
+                            <h3>镜像下载</h3>
+                            <p>系统镜像文件<br>快速部署与恢复</p>
+                            <a href="#" class="action-btn" data-page="mirror">
+                                <span class="sr-only">访问</span>
+                                获取镜像
+                            </a>
+                        </div>
+
+                        <!-- 编程刷题 -->
+                        <div class="download-card" id="programming-card" role="button" tabindex="0">
+                            <span class="card-icon" aria-hidden="true">🔢</span>
+                            <h3>编程刷题</h3>
+                            <p>算法与编程练习<br>提升编程能力与面试准备</p>
+                            <a href="#" class="action-btn" data-page="programming">
+                                <span class="sr-only">访问</span>
+                                立即前往
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 软件下载页面内容 -->
+            <div class="content-page" id="software-page">
+                <div class="page-header">
+                    <h1><span aria-hidden="true">💻</span> 软件下载</h1>
+                    <p>精选实用软件，满足您的各种需求</p>
+                </div>
+
+                <div class="items-grid">
+                    <!-- 文件管理 - 直接下载 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">📦</span>
+                        <h3>文件管理</h3>
+                        <p class="item-info">强大的压缩文件管理器，支持RAR、ZIP等多种格式，提供高效的文件压缩和解压功能。</p>
+                        <div class="item-meta">
+                            <span>版本: 6.24</span>
+                            <span>大小: 3.5 MB</span>
+                        </div>
+                        <a href="winrar-x64.exe" class="direct-download" download aria-label="下载 文件管理，文件：winrar-x64.exe">直接下载</a>
+                    </div>
+
+                    <!-- 系统套件 - 直接下载 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🔑</span>
+                        <h3>系统套件</h3>
+                        <p class="item-info">安全可靠的Windows系统激活工具，一键激活Windows系统，支持多种版本。</p>
+                        <div class="item-meta">
+                            <span>版本: 2024</span>
+                            <span>大小: 8.2 MB</span>
+                        </div>
+                        <a href="2024最新激活工具.rar" class="direct-download" download aria-label="下载 系统套件，文件：2024最新激活工具.rar">直接下载</a>
+                    </div>
+
+                    <!-- Steam - 直接下载 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🎮</span>
+                        <h3>Steam</h3>
+                        <p class="item-info">全球最大的数字游戏平台，拥有数千款游戏，提供社交、商店和社区功能。</p>
+                        <div class="item-meta">
+                            <span>版本: 2023.10</span>
+                            <span>大小: 2.1 MB</span>
+                        </div>
+                        <a href="SteamSetup.exe" class="direct-download" download aria-label="下载 Steam，文件：SteamSetup.exe">直接下载</a>
+                    </div>
+
+                    <!-- 奇游加速器 - 官方链接 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🚀</span>
+                        <h3>奇游加速器</h3>
+                        <p class="item-info">专业的网络加速工具，优化游戏连接，降低延迟，提供稳定的网络环境。</p>
+                        <div class="item-meta">
+                            <span>版本: 最新版</span>
+                            <span>大小: 45.6 MB</span>
+                        </div>
+                        <a href="https://www.qiyou.cn/" class="official-link" target="_blank" aria-label="访问 奇游加速器 官方网站">官方下载</a>
+                    </div>
+
+                    <!-- Marktext - 官方链接 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">📝</span>
+                        <h3>Marktext</h3>
+                        <p class="item-info">简洁优雅的Markdown编辑器，实时预览，支持多种主题，是程序员的理想写作工具。</p>
+                        <div class="item-meta">
+                            <span>版本: 0.17.1</span>
+                            <span>大小: 85.3 MB</span>
+                        </div>
+                        <a href="https://github.com/marktext/marktext" class="official-link" target="_blank" aria-label="访问 Marktext GitHub 页面">GitHub下载</a>
+                    </div>
+
+                    <!-- ToDesk - 官方链接 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🖥️</span>
+                        <h3>ToDesk</h3>
+                        <p class="item-info">流畅的远程桌面控制软件，支持跨平台远程连接，提供高清画质和低延迟体验。</p>
+                        <div class="item-meta">
+                            <span>版本: 4.6.2</span>
+                            <span>大小: 25.8 MB</span>
+                        </div>
+                        <a href="https://www.todesk.com/download.html" class="official-link" target="_blank" aria-label="访问 ToDesk 官方下载页面">官方下载</a>
+                    </div>
+
+                    <!-- Epic Games - 官方链接 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🎯</span>
+                        <h3>Epic Games</h3>
+                        <p class="item-info">Epic游戏平台，每周提供免费游戏，拥有独占大作和优质独立游戏。</p>
+                        <div class="item-meta">
+                            <span>版本: 15.20</span>
+                            <span>大小: 1.8 MB</span>
+                        </div>
+                        <a href="https://www.epicgames.com/store/zh-CN/download" class="official-link" target="_blank" aria-label="访问 Epic Games 官方下载页面">官方下载</a>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 软件下载页面内容 -->
-        <div class="content-page" id="software-page">
-            <div class="page-header">
-                <h1>💻 软件下载</h1>
-                <p>精选实用软件，满足您的各种需求</p>
-            </div>
-
-            <div class="items-grid">
-                <!-- 文件管理 - 直接下载 -->
-                <div class="item-card">
-                    <span class="item-icon">📦</span>
-                    <h3>文件管理</h3>
-                    <p class="item-info">强大的压缩文件管理器，支持RAR、ZIP等多种格式，提供高效的文件压缩和解压功能。</p>
-                    <div class="item-meta">
-                        <span>版本: 6.24</span>
-                        <span>大小: 3.5 MB</span>
-                    </div>
-                    <a href="winrar-x64.exe" class="direct-download" download>直接下载</a>
+            <!-- 镜像下载页面内容 -->
+            <div class="content-page" id="mirror-page">
+                <div class="page-header">
+                    <h1><span aria-hidden="true">📀</span> 镜像下载</h1>
+                    <p>系统镜像与恢复文件，快速部署您的环境</p>
                 </div>
 
-                <!-- 系统套件 - 直接下载 -->
-                <div class="item-card">
-                    <span class="item-icon">🔑</span>
-                    <h3>系统套件</h3>
-                    <p class="item-info">安全可靠的Windows系统激活工具，一键激活Windows系统，支持多种版本。</p>
-                    <div class="item-meta">
-                        <span>版本: 2024</span>
-                        <span>大小: 8.2 MB</span>
+                <div class="items-grid">
+                    <!-- Windows 11 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🖥️</span>
+                        <h3>Windows 11</h3>
+                        <p class="item-info">最新 Windows 11 系统镜像，包含所有更新和安全补丁，提供现代化的用户界面。</p>
+                        <div class="item-meta">
+                            <span>版本: 23H2</span>
+                            <span>大小: 5.2 GB</span>
+                        </div>
+                        <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="official-link" target="_blank" aria-label="访问 Windows 11 官方下载页面">官方下载</a>
                     </div>
-                    <a href="2024最新激活工具.rar" class="direct-download" download>直接下载</a>
-                </div>
 
-                <!-- Steam - 直接下载 -->
-                <div class="item-card">
-                    <span class="item-icon">🎮</span>
-                    <h3>Steam</h3>
-                    <p class="item-info">全球最大的数字游戏平台，拥有数千款游戏，提供社交、商店和社区功能。</p>
-                    <div class="item-meta">
-                        <span>版本: 2023.10</span>
-                        <span>大小: 2.1 MB</span>
+                    <!-- Ubuntu 22.04 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🐧</span>
+                        <h3>Ubuntu 22.04</h3>
+                        <p class="item-info">Ubuntu LTS 版本，稳定的Linux发行版，适合服务器和开发环境。</p>
+                        <div class="item-meta">
+                            <span>版本: 22.04.3</span>
+                            <span>大小: 4.7 GB</span>
+                        </div>
+                        <a href="https://ubuntu.com/download/desktop" class="official-link" target="_blank" aria-label="访问 Ubuntu 22.04 官方下载页面">官方下载</a>
                     </div>
-                    <a href="SteamSetup.exe" class="direct-download" download>直接下载</a>
-                </div>
 
-                <!-- 奇游加速器 - 官方链接 -->
-                <div class="item-card">
-                    <span class="item-icon">🚀</span>
-                    <h3>奇游加速器</h3>
-                    <p class="item-info">专业的网络加速工具，优化游戏连接，降低延迟，提供稳定的网络环境。</p>
-                    <div class="item-meta">
-                        <span>版本: 最新版</span>
-                        <span>大小: 45.6 MB</span>
+                    <!-- Windows 7 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🔄</span>
+                        <h3>Windows 7</h3>
+                        <p class="item-info">经典的Windows 7操作系统，虽然已停止支持，但仍被广泛使用于特定环境。</p>
+                        <div class="item-meta">
+                            <span>版本: SP1</span>
+                            <span>大小: 3.2 GB</span>
+                        </div>
+                        <a href="https://www.microsoft.com/zh-cn/software-download/windows7" class="official-link" target="_blank" aria-label="访问 Windows 7 官方下载页面">官方下载</a>
                     </div>
-                    <a href="https://www.qiyou.cn/" class="official-link" target="_blank">官方下载</a>
-                </div>
 
-                <!-- Marktext - 官方链接 -->
-                <div class="item-card">
-                    <span class="item-icon">📝</span>
-                    <h3>Marktext</h3>
-                    <p class="item-info">简洁优雅的Markdown编辑器，实时预览，支持多种主题，是程序员的理想写作工具。</p>
-                    <div class="item-meta">
-                        <span>版本: 0.17.1</span>
-                        <span>大小: 85.3 MB</span>
+                    <!-- 微PE工具箱 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🔧</span>
+                        <h3>微PE工具箱</h3>
+                        <p class="item-info">轻量级Windows PE工具，系统维护和故障排除必备工具，无广告纯净版。</p>
+                        <div class="item-meta">
+                            <span>版本: 2.3</span>
+                            <span>大小: 220 MB</span>
+                        </div>
+                        <a href="http://www.wepe.com.cn/download.html" class="official-link" target="_blank" aria-label="访问 微PE工具箱 官方下载页面">官方下载</a>
                     </div>
-                    <a href="https://github.com/marktext/marktext" class="official-link" target="_blank">GitHub下载</a>
-                </div>
 
-                <!-- ToDesk - 官方链接 -->
-                <div class="item-card">
-                    <span class="item-icon">🖥️</span>
-                    <h3>ToDesk</h3>
-                    <p class="item-info">流畅的远程桌面控制软件，支持跨平台远程连接，提供高清画质和低延迟体验。</p>
-                    <div class="item-meta">
-                        <span>版本: 4.6.2</span>
-                        <span>大小: 25.8 MB</span>
+                    <!-- Android x86 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">📱</span>
+                        <h3>Android x86</h3>
+                        <p class="item-info">在PC上运行Android系统，支持触摸屏和游戏控制器，适用于x86架构设备。</p>
+                        <div class="item-meta">
+                            <span>版本: 9.0-r2</span>
+                            <span>大小: 1.2 GB</span>
+                        </div>
+                        <a href="https://www.android-x86.org/download" class="official-link" target="_blank" aria-label="访问 Android x86 官方下载页面">官方下载</a>
                     </div>
-                    <a href="https://www.todesk.com/download.html" class="official-link" target="_blank">官方下载</a>
-                </div>
 
-                <!-- Epic Games - 官方链接 -->
-                <div class="item-card">
-                    <span class="item-icon">🎯</span>
-                    <h3>Epic Games</h3>
-                    <p class="item-info">Epic游戏平台，每周提供免费游戏，拥有独占大作和优质独立游戏。</p>
-                    <div class="item-meta">
-                        <span>版本: 15.20</span>
-                        <span>大小: 1.8 MB</span>
+                    <!-- Windows 10 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">⭐</span>
+                        <h3>Windows 10</h3>
+                        <p class="item-info">Windows 10 系统镜像，广泛使用的操作系统，稳定可靠，兼容性强。</p>
+                        <div class="item-meta">
+                            <span>版本: 22H2</span>
+                            <span>大小: 5.4 GB</span>
+                        </div>
+                        <a href="https://www.microsoft.com/zh-cn/software-download/windows10" class="official-link" target="_blank" aria-label="访问 Windows 10 官方下载页面">官方下载</a>
                     </div>
-                    <a href="https://www.epicgames.com/store/zh-CN/download" class="official-link" target="_blank">官方下载</a>
                 </div>
             </div>
-        </div>
 
-        <!-- 镜像下载页面内容 -->
-        <div class="content-page" id="mirror-page">
-            <div class="page-header">
-                <h1>📀 镜像下载</h1>
-                <p>系统镜像与恢复文件，快速部署您的环境</p>
-            </div>
-
-            <div class="items-grid">
-                <!-- Windows 11 -->
-                <div class="item-card">
-                    <span class="item-icon">🖥️</span>
-                    <h3>Windows 11</h3>
-                    <p class="item-info">最新 Windows 11 系统镜像，包含所有更新和安全补丁，提供现代化的用户界面。</p>
-                    <div class="item-meta">
-                        <span>版本: 23H2</span>
-                        <span>大小: 5.2 GB</span>
-                    </div>
-                    <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="official-link" target="_blank">官方下载</a>
+            <!-- 编程刷题页面内容 -->
+            <div class="content-page" id="programming-page">
+                <div class="page-header">
+                    <h1><span aria-hidden="true">🔢</span> 编程刷题</h1>
+                    <p>精选编程刷题平台，提升算法与编程能力</p>
                 </div>
 
-                <!-- Ubuntu 22.04 -->
-                <div class="item-card">
-                    <span class="item-icon">🐧</span>
-                    <h3>Ubuntu 22.04</h3>
-                    <p class="item-info">Ubuntu LTS 版本，稳定的Linux发行版，适合服务器和开发环境。</p>
-                    <div class="item-meta">
-                        <span>版本: 22.04.3</span>
-                        <span>大小: 4.7 GB</span>
+                <div class="items-grid">
+                    <!-- 力扣 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">💯</span>
+                        <h3>力扣 (LeetCode)</h3>
+                        <p class="item-info">全球知名的编程平台，提供海量算法题目和面试准备资源，支持多种编程语言，题目分为简单、中等、困难三个等级[citation:1]。</p>
+                        <div class="item-meta">
+                            <span>题目: 1000+</span>
+                            <span>语言: 10+</span>
+                        </div>
+                        <a href="https://leetcode.cn/" class="official-link" target="_blank" aria-label="访问 力扣 LeetCode 官方网站">前往官网</a>
                     </div>
-                    <a href="https://ubuntu.com/download/desktop" class="official-link" target="_blank">官方下载</a>
-                </div>
 
-                <!-- Windows 7 -->
-                <div class="item-card">
-                    <span class="item-icon">🔄</span>
-                    <h3>Windows 7</h3>
-                    <p class="item-info">经典的Windows 7操作系统，虽然已停止支持，但仍被广泛使用于特定环境。</p>
-                    <div class="item-meta">
-                        <span>版本: SP1</span>
-                        <span>大小: 3.2 GB</span>
+                    <!-- 杭电OJ -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🎓</span>
+                        <h3>杭电OJ (HDU OJ)</h3>
+                        <p class="item-info">杭州电子科技大学的在线评测系统，创办于2005年，题库丰富，是ACM竞赛选手常用的刷题平台[citation:1]。</p>
+                        <div class="item-meta">
+                            <span>题目: 6000+</span>
+                            <span>语言: 多语言</span>
+                        </div>
+                        <a href="http://acm.hdu.edu.cn/" class="official-link" target="_blank" aria-label="访问 杭电OJ 官方网站">前往官网</a>
                     </div>
-                    <a href="https://www.microsoft.com/zh-cn/software-download/windows7" class="official-link" target="_blank">官方下载</a>
-                </div>
 
-                <!-- 微PE工具箱 -->
-                <div class="item-card">
-                    <span class="item-icon">🔧</span>
-                    <h3>微PE工具箱</h3>
-                    <p class="item-info">轻量级Windows PE工具，系统维护和故障排除必备工具，无广告纯净版。</p>
-                    <div class="item-meta">
-                        <span>版本: 2.3</span>
-                        <span>大小: 220 MB</span>
+                    <!-- 洛谷 -->
+                    <div class="item-card">
+                        <span class="item-icon" aria-hidden="true">🐢</span>
+                        <h3>洛谷 (Luogu)</h3>
+                        <p class="item-info">国内著名的算法题库与社区，拥有近8000公有题目[citation:2]，采用闯关式学习模式，适合不同水平的编程爱好者[citation:7]。</p>
+                        <div class="item-meta">
+                            <span>题目: 8000+</span>
+                            <span>用户: 90万+</span>
+                        </div>
+                        <a href="https://www.luogu.com.cn/" class="official-link" target="_blank" aria-label="访问 洛谷 官方网站">前往官网</a>
                     </div>
-                    <a href="http://www.wepe.com.cn/download.html" class="official-link" target="_blank">官方下载</a>
-                </div>
-
-                <!-- Android x86 -->
-                <div class="item-card">
-                    <span class="item-icon">📱</span>
-                    <h3>Android x86</h3>
-                    <p class="item-info">在PC上运行Android系统，支持触摸屏和游戏控制器，适用于x86架构设备。</p>
-                    <div class="item-meta">
-                        <span>版本: 9.0-r2</span>
-                        <span>大小: 1.2 GB</span>
-                    </div>
-                    <a href="https://www.android-x86.org/download" class="official-link" target="_blank">官方下载</a>
-                </div>
-
-                <!-- Windows 10 -->
-                <div class="item-card">
-                    <span class="item-icon">⭐</span>
-                    <h3>Windows 10</h3>
-                    <p class="item-info">Windows 10 系统镜像，广泛使用的操作系统，稳定可靠，兼容性强。</p>
-                    <div class="item-meta">
-                        <span>版本: 22H2</span>
-                        <span>大小: 5.4 GB</span>
-                    </div>
-                    <a href="https://www.microsoft.com/zh-cn/software-download/windows10" class="official-link" target="_blank">官方下载</a>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- 页脚 -->
@@ -854,6 +1012,9 @@
             <p>一切后果请寻找代码编写人，网站管理人拥有最终解释权</p>
         </div>
     </footer>
+
+    <!-- ARIA实时区域 - 用于屏幕阅读器通知 -->
+    <div id="live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
     <script>
         // 创建自动水波纹
@@ -915,7 +1076,9 @@
         function setupNavigation() {
             const navLinks = document.querySelectorAll('.nav-link');
             const actionBtns = document.querySelectorAll('.action-btn[data-page]');
+            const downloadCards = document.querySelectorAll('.download-card');
             const pages = document.querySelectorAll('.content-page');
+            const liveRegion = document.getElementById('live-region');
             
             // 切换页面函数
             function switchPage(pageId) {
@@ -934,6 +1097,16 @@
                         link.classList.add('active');
                     }
                 });
+                
+                // 通知屏幕阅读器页面已切换
+                const pageTitles = {
+                    'home': '首页',
+                    'software': '软件下载页面',
+                    'mirror': '镜像下载页面',
+                    'programming': '编程刷题页面'
+                };
+                
+                liveRegion.textContent = `已切换到${pageTitles[pageId]}`;
                 
                 // 滚动到顶部
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -954,6 +1127,17 @@
                     e.preventDefault();
                     const pageId = btn.getAttribute('data-page');
                     switchPage(pageId);
+                });
+            });
+            
+            // 为下载卡片添加键盘导航支持
+            downloadCards.forEach(card => {
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const pageId = card.id.replace('-card', '');
+                        switchPage(pageId);
+                    }
                 });
             });
         }
